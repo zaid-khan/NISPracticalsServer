@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import messagebox
-from symmetricciphers import caesar_decryption
+from SymmetricCiphers.caesar import caesar_decryption
 from server import get_data_from_server
 from server import get_data_from_file
 import tkinter as tk
