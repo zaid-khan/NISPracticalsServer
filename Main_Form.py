@@ -1,6 +1,8 @@
 import tkinter as tk
 from tkinter import messagebox
 from SymmetricCiphers.caesar import caesar_decryption
+from SymmetricCiphers.hillcipher import HillCipherDecryptWrapper
+
 from server import get_data_from_server
 from server import get_data_from_file
 import tkinter as tk
@@ -33,7 +35,8 @@ def Pass_Text():
                 key_value = key_value % 26
             except ValueError:
                 messagebox.showerror("Error", "Please enter a number")
-            
+                return
+                
             print (data_counter)
             cipher = get_data_from_file(data_counter)
             cipher = cipher.replace("\n", "")
@@ -47,7 +50,31 @@ def Pass_Text():
             ent2.insert(0, cipher)
             ent2.config(state='disabled')
             plain = caesar_decryption(cipher, key_value)
-            ent.insert(0, plain)        
+            ent.insert(0, plain)
+
+        elif tkvarsymmetric.get() == "Hill Cipher":
+            try:
+                key_value = ent1.get()
+                if len(key_value) != 9:
+                    raise ValueError("Length not equal to : 9")
+            except ValueError:
+                messagebox.showerror("Error", "Please enter key of length : 9")
+                return
+
+            print (data_counter)
+            cipher = get_data_from_file(data_counter)
+            cipher = cipher.replace("\n", "")
+            if cipher == "":
+                messagebox.showerror("Error", "Nothing to read")
+                return
+            data_counter += 1
+            ent2.config(state='normal')
+            ent2.delete(0, 'end')
+            ent.delete(0, 'end')
+            ent2.insert(0, cipher)
+            ent2.config(state='disabled')
+            plain = HillCipherDecryptWrapper(cipher, key_value)
+            ent.insert(0, plain)                
     print(ent.get())
 
 mainFrame = tk.Frame(root)
@@ -62,7 +89,7 @@ optionFrame.pack(side=tk.BOTTOM, fill=tk.X, padx=20, pady=20)
 
 tkvarsymmetric = tk.StringVar()
 # List with options
-choicessy = {'Caesar', 'Modified Caesar'}
+choicessy = {'Caesar', 'Hill Cipher'}
 tkvarsymmetric.set('Caesar')
 popupMenuSy = tk.OptionMenu(optionFrame, tkvarsymmetric, *choicessy)
 popupMenuSy.pack(side=tk.TOP, padx=20, pady=20)
