@@ -41,7 +41,7 @@ def finddeterminant(matri, r, c):
         minorm = getMatrixMinor(matri, 0, i)
         determinant += ((matri[0][i]) * (minorm[0][0] * minorm[1][1] - minorm[0][1] * minorm[1][0])) * signchange
         signchange *= -1
-    return determinant
+    return determinant % 26
 
 def multiplymatrixbynumberandmod(matrix_minors, number, r, c):
     for i in range(r):

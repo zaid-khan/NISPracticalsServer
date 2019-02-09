@@ -15,7 +15,7 @@ def decrypt(cipherVector, plainMatrix, inverseMatrixWithMod):
         for j in range(1):
             plainMatrix[i][j] = 0
             for x in range(3):
-                plainMatrix[i][j] += (inverseMatrixWithMod[x][i] *
+                plainMatrix[i][j] += (inverseMatrixWithMod[i][x] *
 									cipherVector[x][j])
             plainMatrix[i][j] = plainMatrix[i][j] % 26                
 
