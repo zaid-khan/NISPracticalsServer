@@ -3,6 +3,7 @@ from tkinter import messagebox
 from SymmetricCiphers.caesar import caesar_decryption
 from SymmetricCiphers.hillcipher import HillCipherDecryptWrapper
 from SymmetricCiphers.playfair import PlayFairDecrypt
+from SymmetricCiphers.sdes import SDESDecrypt
 
 from server import get_data_from_server
 from server import get_data_from_file
@@ -100,6 +101,32 @@ def Pass_Text():
             ent2.config(state='disabled')
             plain = PlayFairDecrypt(cipher, key_value)
             ent.insert(0, plain)
+        
+        elif tkvarsymmetric.get() == "S-DES":
+            try:
+                key_value = ent1.get()
+                if len(key_value) != 10:
+                    raise ValueError("Key is invalid")
+               
+            except ValueError:
+                messagebox.showerror("Error", "Key is invalid")
+                return
+
+            print (data_counter)
+            cipher = get_data_from_file(data_counter)
+            cipher = cipher.replace("\n", "")
+            if cipher == "":
+                messagebox.showerror("Error", "Nothing to read")
+                return
+            data_counter += 1
+            ent2.config(state='normal')
+            ent2.delete(0, 'end')
+            ent.delete(0, 'end')
+            ent2.insert(0, cipher)
+            ent2.config(state='disabled')
+            plain = SDESDecrypt(key_value, cipher)
+            ent.insert(0, plain)
+
     print(ent.get())
 
 mainFrame = tk.Frame(root)
@@ -114,7 +141,7 @@ optionFrame.pack(side=tk.BOTTOM, fill=tk.X, padx=20, pady=20)
 
 tkvarsymmetric = tk.StringVar()
 # List with options
-choicessy = {'Caesar', 'Hill', 'Playfair'}
+choicessy = {'Caesar', 'Hill', 'Playfair', 'S-DES'}
 tkvarsymmetric.set('Caesar')
 popupMenuSy = tk.OptionMenu(optionFrame, tkvarsymmetric, *choicessy)
 popupMenuSy.pack(side=tk.TOP, padx=20, pady=20)
